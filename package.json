@@ -1,0 +1,20 @@
+{
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.9.0",
+    "@truffle/hdwallet-provider": "^1.7.0",
+    "bytes32": "^0.0.3",
+    "dotenv": "^16.3.1",
+    "keccak256": "^1.0.6",
+    "solc": "^0.8.24",
+    "truffle": "^5.6.1",
+    "truffle-contract-size": "^2.0.1",
+    "truffle-plugin-verify": "^0.6.5",
+    "web3": "^1.8.0",
+    "witnet-solidity-bridge": "^0.6.1"
+  },
+  "devDependencies": {
+    "@openzeppelin/test-helpers": "^0.5.16",
+    "chai": "^4.3.6",
+    "ganache-cli": "^6.12.2"
+  }
+}
