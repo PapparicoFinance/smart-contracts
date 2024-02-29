@@ -7,7 +7,7 @@ const PapparicoVaults = artifacts.require("PapparicoVaults");
 
 module.exports = async function(callback) {
 
-  const papparicoVaultsInstance = await PapparicoVaults.deployed(); //.at("0xbf01aae7367f735fdcd423357ebd0645e88e14c6")
+  const papparicoVaultsInstance = await PapparicoVaults.deployed();
 
   let earlyWithdrawalPoints = 10;
   let earlyWithdrawalPerc = 500;

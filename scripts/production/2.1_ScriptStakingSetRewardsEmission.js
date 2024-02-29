@@ -7,8 +7,8 @@ const PapparicoStaking = artifacts.require("PapparicoStaking");
 module.exports = async function(callback) {
 
   console.log("DEPLOYER: " + DEPLOYER);
-  const papparicoStakingInstance = await PapparicoStaking.at(""); //ADD ADDRESS
-  await papparicoStakingInstance.setRewardEmissionPerBlock(3000); //600000
+  const papparicoStakingInstance = await PapparicoStaking.deployed(); //ADD ADDRESS
+  await papparicoStakingInstance.setRewardEmissionPerBlock(3000, {from: DEPLOYER}); //600000
 
 	callback();
 }
