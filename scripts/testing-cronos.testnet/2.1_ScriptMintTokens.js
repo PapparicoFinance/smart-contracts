@@ -1,4 +1,5 @@
 //truffle exec scripts/testing-cronos.testnet/2.1_ScriptMintTokens.js --network cronostestnet
+
 require("dotenv").config();
 const { DEPLOYER } = process.env;
 

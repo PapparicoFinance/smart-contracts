@@ -18,21 +18,42 @@ contract PapparicoToken is ERC20("Papparico Finance Token", "PPFT"), AccessContr
   uint256 public constant MAX_SUPPLY = 73000000000 * DIGITS;
 
   uint256 public remainingCommunitySupply;
-
   uint256 public remainingTeamSupply;
-
   uint256 public remainingInfraSupply;
+  uint256 public remainingMarketingSupply;
+  uint256 public burnt;
 
-  uint256 public marketingSupply;
+  mapping(SupplyTarget => uint256) public mintedBySupplyTarget;
 
   enum SupplyTarget {
     TOURNAMENTS,
     STAKING,
     VAULTS,
-    THIRD_PARTY,
+    LIQUIDITY,
+    POOLS,
     TEAM,
     INFRASTRUCTURE,
     MARKETING
+  }
+
+  struct RemainingSupply {
+    uint256 remainingCommunitySupply;
+    uint256 remainingTeamSupply;
+    uint256 remainingInfraSupply;
+    uint256 remainingMarketingSupply;
+  }
+
+  struct MintedSupplyTarget {
+    uint256 mintedForTournaments;
+    uint256 mintedForStaking;
+    uint256 mintedForVaults;
+    uint256 mintedForLiquidity;
+    uint256 mintedForBullishPools;
+    uint256 mintedForTeam;
+    uint256 mintedForInfrastructure;
+    uint256 mintedForMarketing;
+    uint256 totalMinted;
+    uint256 totalBurnt;
   }
 
   PapparicoTreasury private immutable papparicoTreasury;
@@ -59,19 +80,21 @@ contract PapparicoToken is ERC20("Papparico Finance Token", "PPFT"), AccessContr
       .add(tournaments)
       .add(vaults);
 
-    remainingTeamSupply  = 14_600_000_000 * DIGITS; //20%
-    remainingInfraSupply =  3_650_000_000 * DIGITS; //5%
-    marketingSupply      =  3_650_000_000 * DIGITS; //5%
+    remainingTeamSupply      = 14_600_000_000 * DIGITS; //20%
+    remainingInfraSupply     =  3_650_000_000 * DIGITS; //5%
+    remainingMarketingSupply =  3_650_000_000 * DIGITS; //5%
   }
 
   function mint(address _account, uint256 _amount, SupplyTarget _supplyTarget) public onlyMinter() 
     checkMintRequirements(_amount, _supplyTarget) {
+    mintedBySupplyTarget[_supplyTarget] = mintedBySupplyTarget[_supplyTarget].add(_amount);  
     adjustSupply(_amount, _supplyTarget);
     _mint(_account, _amount);
     emit Minted(_account, _amount, uint256(_supplyTarget), block.timestamp);
   }
 
   function burn(uint256 _amount) public onlyBurner() {
+    burnt = burnt.add(_amount);
     _burn(msg.sender, _amount);
     emit Burnt(msg.sender, _amount, block.timestamp);
   }
@@ -82,7 +105,7 @@ contract PapparicoToken is ERC20("Papparico Finance Token", "PPFT"), AccessContr
     } else if (_supplyTarget == SupplyTarget.INFRASTRUCTURE) {
       remainingInfraSupply = remainingInfraSupply.sub(_amount);
     } else if (_supplyTarget == SupplyTarget.MARKETING) {
-      marketingSupply = marketingSupply.sub(_amount);
+      remainingMarketingSupply = remainingMarketingSupply.sub(_amount);
     } else {
       remainingCommunitySupply = remainingCommunitySupply.sub(_amount);
     }
@@ -90,6 +113,40 @@ contract PapparicoToken is ERC20("Papparico Finance Token", "PPFT"), AccessContr
 
   function getMaxSupply() external pure returns (uint256) {
     return MAX_SUPPLY;
+  }
+
+  function getRemainingSupply() external view returns (RemainingSupply memory) {
+    RemainingSupply memory remainingSupply = RemainingSupply({
+      remainingCommunitySupply: remainingCommunitySupply,
+      remainingTeamSupply     : remainingTeamSupply,
+      remainingInfraSupply    : remainingInfraSupply,
+      remainingMarketingSupply: remainingMarketingSupply
+    });
+    return remainingSupply;
+  }
+
+  function getMintedSupplyTarget() external view returns (MintedSupplyTarget memory) {
+    MintedSupplyTarget memory minted = MintedSupplyTarget({
+      mintedForTournaments   : mintedBySupplyTarget[SupplyTarget.TOURNAMENTS],
+      mintedForStaking       : mintedBySupplyTarget[SupplyTarget.STAKING],
+      mintedForVaults        : mintedBySupplyTarget[SupplyTarget.VAULTS],
+      mintedForLiquidity     : mintedBySupplyTarget[SupplyTarget.LIQUIDITY],
+      mintedForBullishPools  : mintedBySupplyTarget[SupplyTarget.POOLS],
+      mintedForTeam          : mintedBySupplyTarget[SupplyTarget.TEAM],
+      mintedForInfrastructure: mintedBySupplyTarget[SupplyTarget.INFRASTRUCTURE],
+      mintedForMarketing     : mintedBySupplyTarget[SupplyTarget.MARKETING],
+      totalMinted: 0,
+      totalBurnt: burnt
+    });
+    minted.totalMinted = minted.mintedForTournaments
+      .add(minted.mintedForStaking)
+      .add(minted.mintedForVaults)
+      .add(minted.mintedForLiquidity)
+      .add(minted.mintedForBullishPools)
+      .add(minted.mintedForTeam)
+      .add(minted.mintedForInfrastructure)
+      .add(minted.mintedForMarketing);
+    return minted;
   }
 
   receive() external payable override {
@@ -123,7 +180,7 @@ contract PapparicoToken is ERC20("Papparico Finance Token", "PPFT"), AccessContr
     } else if (_supplyTarget == SupplyTarget.INFRASTRUCTURE) {
       require(remainingInfraSupply >= _amount, "Exceeds the remaining infrastructure supply");
     } else if (_supplyTarget == SupplyTarget.MARKETING) {
-      require(marketingSupply >= _amount, "Exceeds the remaining marketing supply");
+      require(remainingMarketingSupply >= _amount, "Exceeds the remaining marketing supply");
     } else {
       require(remainingCommunitySupply >= _amount, "Exceeds the remaining community supply");
     }
