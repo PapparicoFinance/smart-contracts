@@ -18,7 +18,7 @@ module.exports = async function(callback) {
   await papparicoStakingInstance.initialize(currentBlockNumber + 50, rewardsEmissionPerBlock, {from: DEPLOYER});
 
   //Set withdrawalFee
-  await papparicoStakingInstance.setWithdrawalFee(1 * 100, {from: DEPLOYER}); //Multiply the desired percent by 100
+  await papparicoStakingInstance.setWithdrawalFee(0, {from: DEPLOYER}); //Multiply the desired percent by 100
 
 	callback();
 }

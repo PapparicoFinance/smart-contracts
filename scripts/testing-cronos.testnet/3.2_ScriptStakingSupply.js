@@ -18,7 +18,7 @@ module.exports = async function(callback) {
   let rewardsEmissionPerBlock = 3000;
 
   const DECIMAL_DIGITS = toBigNumber("1000000000000000000");
-  let supplyAmount = (rewardsEmissionPerBlock * 60 * (14400 * 90)) / 600000;
+  let supplyAmount = (rewardsEmissionPerBlock * 60 * (14400 * 180)) / 600000;
   let supplyAmountBig = toBigNumber(supplyAmount).mul(DECIMAL_DIGITS);
   console.log("SUPPLIED = " + supplyAmountBig);
 

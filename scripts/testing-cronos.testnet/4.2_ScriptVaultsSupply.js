@@ -18,11 +18,11 @@ module.exports = async function(callback) {
   let rewardsEmissionPerBlock = 3500;
 
   const DECIMAL_DIGITS = toBigNumber("1000000000000000000");
-  let supplyAmountV1M = (rewardsEmissionPerBlock  * 2  * 60 * (14400 * 90)) / 600000;
-  let supplyAmountV6M = (rewardsEmissionPerBlock  * 12 * 60 * (14400 * 90)) / 600000;
-  let supplyAmountV12M = (rewardsEmissionPerBlock * 24 * 60 * (14400 * 90)) / 600000;
-  let supplyAmountV24M = (rewardsEmissionPerBlock * 48 * 60 * (14400 * 90)) / 600000;
-  let supplyAmountV48M = (rewardsEmissionPerBlock * 96 * 60 * (14400 * 90)) / 600000;
+  let supplyAmountV1M = (rewardsEmissionPerBlock  * 2  * 60 * (14400 * 180)) / 600000;
+  let supplyAmountV6M = (rewardsEmissionPerBlock  * 12 * 60 * (14400 * 180)) / 600000;
+  let supplyAmountV12M = (rewardsEmissionPerBlock * 24 * 60 * (14400 * 180)) / 600000;
+  let supplyAmountV24M = (rewardsEmissionPerBlock * 48 * 60 * (14400 * 180)) / 600000;
+  let supplyAmountV48M = (rewardsEmissionPerBlock * 96 * 60 * (14400 * 180)) / 600000;
   let supplyAmountBig = toBigNumber(supplyAmountV1M + supplyAmountV6M + supplyAmountV12M + supplyAmountV24M + supplyAmountV48M).mul(DECIMAL_DIGITS);
   console.log("SUPPLIED = " + supplyAmountBig);
 
