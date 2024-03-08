@@ -9,7 +9,7 @@ module.exports = async function(callback) {
 
   const papparicoVaultsInstance = await PapparicoVaults.deployed();
 
-  let earlyWithdrawalPoints = 2;
+  let earlyWithdrawalPoints = 1;
   let earlyWithdrawalPerc = 500;
 
   await papparicoVaultsInstance.setEarlyWithdrawalParams(earlyWithdrawalPoints, earlyWithdrawalPerc, {from: DEPLOYER});

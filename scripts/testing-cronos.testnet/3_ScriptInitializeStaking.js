@@ -1,4 +1,4 @@
-//truffle exec scripts/production/2_ScriptInitializeStaking.js --network cronosmainnet
+//truffle exec scripts/testing-cronos.testnet/3_ScriptInitializeStaking.js --network cronostestnet
 
 require("dotenv").config();
 const { DEPLOYER } = process.env;
