@@ -15,7 +15,7 @@ module.exports = async function(callback) {
   
   //Initialize PapparicoStaking - Params: 1 = startBlock, 2 = rewardsEmissionPerBlock
   let rewardsEmissionPerBlock = 3500;
-  await papparicoVaultsInstance.initialize(currentBlockNumber + 50, rewardsEmissionPerBlock, {from: DEPLOYER});
+  await papparicoVaultsInstance.initialize(currentBlockNumber + 864000, rewardsEmissionPerBlock, {from: DEPLOYER});
 
 	callback();
 }
