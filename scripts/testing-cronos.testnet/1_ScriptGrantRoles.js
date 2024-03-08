@@ -21,6 +21,7 @@ module.exports = async function(callback) {
   const papparicoTeamVestingInstance = await PapparicoTeamVesting.deployed();
 
   //PapparicoTeamVesting must have MINTER role on PapparicoToken
+  let minterRole = keccak256('MINTER');
   await papparicoTokenInstance.grantRole(minterRole, papparicoTeamVestingInstance.address, {from: DEPLOYER});
 
   //PapparicoTournaments must have SENDER role on PapparicoTreasury
