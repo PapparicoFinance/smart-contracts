@@ -269,13 +269,13 @@ contract PapparicoVaults is AccessControl, ReentrancyGuard, IPapparicoPayable {
   }
 
   function calculateLockedUntil(uint256 currentTime, VType _vType) public pure returns (uint256) {
-    uint16 totalDays = 
-      (_vType == VType.V_1M ? 30 : 
-        (_vType == VType.V_6M ? 183 : 
-          (_vType == VType.V_12M ? 365 : 
-            (_vType == VType.V_24M ? 730 : 1460))));
+    uint16 months = 
+      (_vType == VType.V_1M ? 1 : 
+        (_vType == VType.V_6M ? 6 : 
+          (_vType == VType.V_12M ? 12 : 
+            (_vType == VType.V_24M ? 24 : 48))));
 
-    return DateUtils.addDays(currentTime, totalDays);
+    return DateUtils.addMonths(currentTime, months);
   }
 
   function calculateLockedUntil(VType _vType) public view returns (uint256) {
