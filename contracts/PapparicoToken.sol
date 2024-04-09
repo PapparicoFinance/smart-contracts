@@ -15,7 +15,7 @@ contract PapparicoToken is ERC20("Papparico Finance Token", "PPFT"), AccessContr
   bytes32 public constant MINTER = keccak256("MINTER");
   bytes32 public constant BURNER = keccak256("BURNER");
   uint256 public constant DIGITS = 1e18;
-  uint256 public constant MAX_SUPPLY = 73000000000 * DIGITS;
+  uint256 public constant MAX_SUPPLY = 73_000_000_000 * DIGITS;
 
   uint256 public remainingCommunitySupply;
   uint256 public remainingTeamSupply;
@@ -66,21 +66,25 @@ contract PapparicoToken is ERC20("Papparico Finance Token", "PPFT"), AccessContr
     _grantRole(BURNER, msg.sender);
 
      //Community
-    uint256 igo          =    146_000_000 * DIGITS; //0.2%
-    uint256 liquidity    = 10_950_000_000 * DIGITS; //15%
-    uint256 staking      =  3_504_000_000 * DIGITS; //4.8%
+    uint256 launchpad    =  4_000_000_000 * DIGITS; //5.48%
+    uint256 liquidity    =  7_300_000_000 * DIGITS; //10%
+    uint256 staking      =  3_300_000_000 * DIGITS; //4.52%
+    uint256 lpMining     =  3_650_000_000 * DIGITS; //5%
     uint256 bullishPools =  7_300_000_000 * DIGITS; //10%
     uint256 tournaments  = 14_600_000_000 * DIGITS; //20%
     uint256 vaults       = 14_600_000_000 * DIGITS; //20%
 
-    remainingCommunitySupply = igo
+    remainingCommunitySupply = launchpad
       .add(liquidity)
       .add(staking)
+      .add(lpMining);
+
+    remainingCommunitySupply = remainingCommunitySupply  
       .add(bullishPools)
       .add(tournaments)
       .add(vaults);
 
-    remainingTeamSupply      = 14_600_000_000 * DIGITS; //20%
+    remainingTeamSupply      = 10_950_000_000 * DIGITS; //15%
     remainingInfraSupply     =  3_650_000_000 * DIGITS; //5%
     remainingMarketingSupply =  3_650_000_000 * DIGITS; //5%
   }
@@ -174,7 +178,7 @@ contract PapparicoToken is ERC20("Papparico Finance Token", "PPFT"), AccessContr
 
   modifier checkMintRequirements(uint256 _amount, SupplyTarget _supplyTarget) {
     require(_amount > 0, "You can't mint 0");
-    require(_amount.add(totalSupply()) <= MAX_SUPPLY, "Minting exceeds MaxSupply");
+    require(_amount.add(totalSupply()) <= MAX_SUPPLY, "Mint exceeds MaxSupply");
     if (_supplyTarget == SupplyTarget.TEAM) {
       require(remainingTeamSupply >= _amount, "Exceeds the remaining team supply");
     } else if (_supplyTarget == SupplyTarget.INFRASTRUCTURE) {
